@@ -152,7 +152,7 @@ spec:
             git config user.name "CI Pipeline"
             git add .
             git commit -m "Linting yaml manifests"
-            git push origin HEAD:master
+            git push origin HEAD:main
         env:
           - name: GIT_USER
             valueFrom:
