@@ -46,7 +46,7 @@ spec:
                   value: "{{workflow.parameters.image-name}}"
 
           - name: run-test
-            template: run-test
+            template: test
             dependencies: [checkout]
 
           - name: update-manifests
