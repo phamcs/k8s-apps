@@ -111,10 +111,6 @@ spec:
                 path: config.json
 
     - name: run-test
-      inputs:
-        artifacts:
-          - name: workspace
-            path: /workspace/k8s-apps
       container:
         image: alpine:latest
         command: [sh, -c]
