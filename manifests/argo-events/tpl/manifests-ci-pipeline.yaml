@@ -46,8 +46,15 @@ spec:
                 - name: image
                   value: "{{workflow.parameters.image-name}}"
 
-          - name: run-test
-            template: run-test
+          - name: run-linter
+            template: run-linter
+            arguments:
+              artifacts:
+                - name: k8s-apps
+                  git:
+                    repo: "{{workflow.parameters.git-repo}}"
+                    revision: "{{workflow.parameters.git-revision}}"
+                    disableSubmodules: true
             dependencies: [checkout]
 
           - name: update-manifests
@@ -111,7 +118,7 @@ spec:
               - key: .dockerconfigjson
                 path: config.json
 
-    - name: run-test
+    - name: run-linter
       inputs:
         artifacts:
           - name: k8s-apps
