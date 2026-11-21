@@ -13,9 +13,9 @@ spec:
       - name: git-revision
         value: master
       - name: image-name
-        value: phamcs/podinfo
+        value: podinfo
       - name: manifest-repo
-        value: https://github.com/phamcs/podinfo.git
+        value: manifests/
   volumeClaimTemplates:
     - metadata:
         name: workspace

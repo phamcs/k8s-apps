@@ -9,7 +9,7 @@ spec:
   arguments:
     parameters:
       - name: repo-url
-        value: https://github.com/phamcs/misc.git
+        value: https://github.com/phamcs/k8s-apps.git
       - name: revision
         value: main
       - name: manifests-path
@@ -21,7 +21,7 @@ spec:
             template: argo-events-linter
             arguments:
               artifacts:
-                - name: misc
+                - name: k8s-apps
                   git:
                     repo: "{{workflow.parameters.repo-url}}"
                     revision: "{{workflow.parameters.revision}}"
@@ -29,8 +29,8 @@ spec:
     - name: argo-events-linter
       inputs:
         artifacts:
-          - name: misc
-            path: /workspace/misc
+          - name: k8s-apps
+            path: /workspace/k8s-apps
       container:
         image: quay.io/argoproj/argo-events:latest
         command: [argo-events]
@@ -38,4 +38,4 @@ spec:
           - lint
           - --strict
           - -R
-          - /workspace/misc/{{workflow.parameters.manifests-path}}
+          - /workspace/k8s-apps/{{workflow.parameters.manifests-path}}

@@ -9,11 +9,11 @@ spec:
   arguments:
     parameters:
       - name: git-repo
-        value: https://github.com/phamcs/misc.git
+        value: https://github.com/phamcs/k8s-apps.git
       - name: git-revision
         value: main
       - name: image-name
-        value: misc
+        value: k8s-apps
 
   volumeClaimTemplates:
     - metadata:
@@ -69,8 +69,8 @@ spec:
         command: [sh, -c]
         args:
           - |
-            git clone {{inputs.parameters.repo}} /workspace/misc
-            cd /workspace/misc
+            git clone {{inputs.parameters.repo}} /workspace/k8s-apps
+            cd /workspace/k8s-apps
             git checkout {{inputs.parameters.revision}}
         volumeMounts:
           - name: workspace
@@ -85,8 +85,8 @@ spec:
         image: gcr.io/kaniko-project/executor:latest
         command: ["/kaniko/executor"]
         args:
-          - "--dockerfile=/workspace/misc/Dockerfile"
-          - "--context=/workspace/misc"
+          - "--dockerfile=/workspace/k8s-apps/Dockerfile"
+          - "--context=/workspace/k8s-apps"
           #- "--no-push"
           - "--destination=phamcs/{{workflow.parameters.image-name}}:{{workflow.parameters.git-revision}}"
           - "--cache=true"
@@ -113,8 +113,8 @@ spec:
     - name: run-test
       inputs:
         artifacts:
-          - name: misc
-            path: /workspace/misc
+          - name: k8s-apps
+            path: /workspace/k8s-apps
       container:
         image: alpine:latest
         command: [sh, -c]
@@ -123,8 +123,8 @@ spec:
             apk add --no-cache yamllint py3-pip pipx
             pipx install yamlfix
             export PATH=$PATH:/root/.local/bin
-            yamllint /workspace/misc/manifests
-            yamlfix /workspace/misc/manifests
+            yamllint /workspace/k8s-apps/manifests
+            yamlfix /workspace/k8s-apps/manifests
 
     - name: update-git-manifests
       inputs:
@@ -137,8 +137,8 @@ spec:
         args:
           - |
             # Clone the repository
-            git clone https://$(GIT_USER):$(GIT_TOKEN)@github.com/phamcs/misc.git /tmp/misc
-            cd /tmp/misc
+            git clone https://$(GIT_USER):$(GIT_TOKEN)@github.com/phamcs/k8s-apps.git /tmp/k8s-apps
+            cd /tmp/k8s-apps
             # Commit and push
             git config user.email "phamcs@gmail.com"
             git config user.name "CI Pipeline"
