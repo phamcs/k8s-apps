@@ -112,7 +112,7 @@ spec:
 
     - name: run-test
       inputs:
-        artifacts:
+        parameters:
           - name: k8s-apps
             path: /workspace/k8s-apps
       container:
