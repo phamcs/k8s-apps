@@ -113,7 +113,7 @@ spec:
     - name: run-test
       inputs:
         artifacts:
-          - name: k8s-apps
+          - name: workspace
             path: /workspace/k8s-apps
       container:
         image: alpine:latest
