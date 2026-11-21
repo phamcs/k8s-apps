@@ -14,7 +14,8 @@ spec:
         value: main
       - name: image-name
         value: k8s-apps
-
+      - name: manifests-path
+        value: manifests
   volumeClaimTemplates:
     - metadata:
         name: workspace
@@ -112,7 +113,7 @@ spec:
 
     - name: run-test
       inputs:
-        parameters:
+        artifacts:
           - name: k8s-apps
             path: /workspace/k8s-apps
       container:
@@ -123,8 +124,8 @@ spec:
             apk add --no-cache yamllint py3-pip pipx
             pipx install yamlfix
             export PATH=$PATH:/root/.local/bin
-            yamllint /workspace/k8s-apps/manifests
-            yamlfix /workspace/k8s-apps/manifests
+            yamllint /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+            yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
     - name: update-git-manifests
       inputs:
