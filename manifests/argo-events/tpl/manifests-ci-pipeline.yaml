@@ -129,12 +129,10 @@ spec:
         args:
           - |
             apk add --no-cache git py3-pip pipx yamllint
-            pipx install pre-commit
+            pipx install yamlfix
             export PATH=$PATH:/root/.local/bin
-            pipx ensurepath
-            pre-commit run --all-files
-            # yamllint /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
-            # yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+            yamllint /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+            yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
     - name: update-git-manifests
       inputs:
