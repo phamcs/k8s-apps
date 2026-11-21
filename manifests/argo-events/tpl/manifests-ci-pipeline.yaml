@@ -128,11 +128,11 @@ spec:
         command: [sh, -c]
         args:
           - |
-            apk add --no-cache bash yamllint py3-pip pipx
+            apk add --no-cache yamllint py3-pip pipx
             pipx install pre-commit
+            export PATH=$PATH:/root/.local/bin
             pipx ensurepath
             pre-commit run --all-files
-            # export PATH=$PATH:/root/.local/bin
             # yamllint /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
             # yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
