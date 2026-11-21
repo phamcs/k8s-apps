@@ -140,20 +140,16 @@ spec:
           - name: image
           - name: tag
       container:
-        image: alpine:latest
+        image: alpine/git:latest
         command: [sh, -c]
         args:
           - |
-            apk add --no-cache git py3-pip pipx
-            pipx install pre-commit
-            export PATH=$PATH:/root/.local/bin
             # Clone the repository
             git clone https://$(GIT_USER):$(GIT_TOKEN)@github.com/phamcs/k8s-apps.git /tmp/k8s-apps
             cd /tmp/k8s-apps
             # Commit and push
             git config user.email "phamcs@gmail.com"
             git config user.name "CI Pipeline"
-            pre-commit run --all-files
             git add .
             git commit -m "Linting yaml manifests"
             git push origin HEAD:main
