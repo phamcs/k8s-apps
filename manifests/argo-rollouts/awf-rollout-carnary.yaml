@@ -74,7 +74,12 @@ spec:
   strategy:
     canary:
       steps:
-        - setWeight: 20
+        - setWeight: 10
+        - pause: { duration: 3m }
+        - setWeight: 30
+        - pause: { duration: 3m }
+        - setWeight: 60
+        - pause: { duration: 3m }
         - analysis:
             templates:
               - templateName: run-argo-workflow
