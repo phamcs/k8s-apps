@@ -59,14 +59,14 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nginx
+      app: alpine
   template:
     metadata:
       labels:
-        app: nginx
+        app: alpine
     spec:
       containers:
-        - name: nginx
+        - name: alpine
           image: docker.io/alpine:latest
           ports:
             - containerPort: 8090
