@@ -1693,7 +1693,7 @@ service:
 externalAccess:
   ## @param externalAccess.enabled Enable Kubernetes external cluster access to Kafka brokers
   ##
-  enabled: true
+  enabled: false
   ## Service settings
   controller:
     ## @param externalAccess.controller.forceExpose If set to true, force exposing controller-eligible nodes although they are configured as controller-only nodes
@@ -1720,8 +1720,7 @@ externalAccess:
       ##   - X.X.X.X
       ##   - Y.Y.Y.Y
       ##
-      loadBalancerIPs:
-        - 10.0.0.82
+      loadBalancerIPs: []
       ## @param externalAccess.controller.service.loadBalancerNames Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount
       ## e.g:
       ## loadBalancerNames:
@@ -1958,7 +1957,7 @@ serviceAccount:
   ## @param serviceAccount.name The name of the service account to use. If not set and `create` is `true`, a name is generated
   ## If not set and create is true, a name is generated using the kafka.serviceAccountName template
   ##
-  name: "kafka-sa"
+  name: ""
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
