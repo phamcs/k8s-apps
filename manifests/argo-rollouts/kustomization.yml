@@ -10,7 +10,6 @@ resources:
   - awf-rollout-carnary.yaml
   - nginx-rollout-carnary.yaml
   - rollout-dashboard-ingress.yaml
-  - rollout-transform.yaml
   - sa-rbac.yaml
 
 
