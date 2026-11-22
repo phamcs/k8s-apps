@@ -72,23 +72,23 @@ spec:
             - containerPort: 8090
 
   strategy:
-    canary:
-      steps:
-        - setWeight: 20
-        - analysis:
-            templates:
-              - templateName: run-argo-workflow
-            args:
-              - name: workflow-template-name
-                value: smoke-test-carnary-suite
-        - setWeight: 100
+    # canary:
+    #   steps:
+    #     - setWeight: 20
+    #     - analysis:
+    #         templates:
+    #           - templateName: run-argo-workflow
+    #         args:
+    #           - name: workflow-template-name
+    #             value: smoke-test-carnary-suite
+    #     - setWeight: 100
 
-    # blueGreen:
-    #   activeService: alpine-stable
-    #   previewService: alpine-carnary
-    #   prePromotionAnalysis:
-    #     templates:
-    #       - templateName: run-argo-workflow
-    #     args:
-    #       - name: workflow-template-name
-    #         value: smoke-test-bluegreen-suite
+    blueGreen:
+      activeService: alpine-stable
+      previewService: alpine-carnary
+      prePromotionAnalysis:
+        templates:
+          - templateName: run-argo-workflow
+        args:
+          - name: workflow-template-name
+            value: smoke-test-bluegreen-suite
