@@ -7,9 +7,12 @@ configurations:
   - rollout-transform.yaml
 
 resources:
-  - rollout-carnary.yaml
+  - awf-rollout-carnary.yaml
+  - nginx-rollout-carnary.yaml
   - rollout-dashboard-ingress.yaml
-  #- rollout-transform.yaml
+  - rollout-transform.yaml
+  - sa-rbac.yaml
+
 
 helmCharts:
   - name: argo-rollouts

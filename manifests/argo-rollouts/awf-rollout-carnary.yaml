@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: run-argo-workflow
+  namespace: default
+spec:
+  args:
+    - name: workflow-template-name
+    - name: target-url
+      value: "http://cluster.local"
+  metrics:
+    - name: integration-test-workflow
+      provider:
+        job:
+          spec:
+            backoffLimit: 0
+            template:
+              spec:
+                serviceAccountName: rollout-workflow-runner
+                restartPolicy: Never
+                containers:
+                  - name: argo-submit
+                    image: quay.io/argoproj/argocli:v3.5.10
+                    args:
+                      - submit
+                      - --from=workflowtemplate/{{args.workflow-template-name}}
+                      - -p
+                      - target-url={{args.target-url}}
+                      - --wait
+                      - --log
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: docker.io/nginx:latest
+          ports:
+            - containerPort: 8080
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 3m }
+        - setWeight: 30
+        - pause: { duration: 3m }
+        - setWeight: 60
+        - pause: { duration: 3m }
+      analysis:
+        templates:
+          - templateName: run-argo-workflow
+        startingStep: 1
+      canaryService: nginx-canary
+      stableService: nginx-stable
