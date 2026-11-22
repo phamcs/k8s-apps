@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kafka
+
+# resources:
+#   - kafka-ingress.yaml
+  # - kafka-service.yaml
+  # - kafka-stateful-set.yaml
+  # - kafka-ui-deployment.yaml
+
+helmCharts:
+  - name: kafka
+    repo: oci://registry-1.docker.io/bitnamicharts/kafka
+    version: 32.4.3 # Replace with the latest or desired version
+    releaseName: kafka
+    valuesFile: kafka-values.yaml
+
+
+#patches:
+  # Inline target patch method
+  # - target:
+  #     kind: Service
+  #     name: kp-stack-grafana
+  #   patch: |-
+  #     apiVersion: v1
+  #     kind: Service
+  #     metadata:
+  #       name: kp-stack-grafana
+  #     annotations:
+  #       metallb.io/loadBalancerIPs: 10.0.0.94
+  #     spec:
+  #       type: LoadBalancer
