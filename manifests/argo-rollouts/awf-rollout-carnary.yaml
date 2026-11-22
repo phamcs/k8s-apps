@@ -59,29 +59,36 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: alpine
+      app: nginx
   template:
     metadata:
       labels:
-        app: alpine
+        app: nginx
     spec:
       containers:
-        - name: alpine
+        - name: nginx
           image: docker.io/alpine:latest
           ports:
             - containerPort: 8090
+
   strategy:
     canary:
       steps:
-        - setWeight: 10
-        - pause: { duration: 3m }
-        - setWeight: 30
-        - pause: { duration: 3m }
-        - setWeight: 60
-        - pause: { duration: 3m }
-      analysis:
+        - setWeight: 20
+        - analysis:
+            templates:
+              - templateName: run-argo-workflow
+            args:
+              - name: run-argo-workflow
+                value: smoke-test-carnary-suite
+        - setWeight: 100
+
+    blueGreen:
+      activeService: alpine-stable
+      previewService: alpine-carnary
+      prePromotionAnalysis:
         templates:
           - templateName: run-argo-workflow
-        startingStep: 1
-      canaryService: alpine-canary
-      stableService: alpine-stable
+        args:
+          - name: run-argo-workflow
+            value: smoke-test-bluegreen-suite
