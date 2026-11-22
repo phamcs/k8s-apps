@@ -79,7 +79,7 @@ spec:
             templates:
               - templateName: run-argo-workflow
             args:
-              - name: run-argo-workflow
+              - name: workflow-template-name
                 value: smoke-test-carnary-suite
         - setWeight: 100
 
@@ -90,5 +90,5 @@ spec:
         templates:
           - templateName: run-argo-workflow
         args:
-          - name: run-argo-workflow
+          - name: workflow-template-name
             value: smoke-test-bluegreen-suite
