@@ -8,14 +8,22 @@ spec:
   entrypoint: linter-events
   arguments:
     parameters:
-      - name: git-repo
+      - name: k8s-apps-repo
         value: https://github.com/phamcs/k8s-apps.git
-      - name: git-revision
+      - name: k8s-apps-revision
         value: main
-      - name: image-name
+      - name: k8s-apps-image-name
         value: k8s-apps
       - name: manifests-path
-        value: manifests
+        value: manifests/
+      - name: misc-repo
+        value: https://github.com/phamcs/misc.git
+      - name: misc-revision
+        value: main
+      - name: misc-image-name
+        value: misc
+      - name: misc-path
+        value: misc/
   volumeClaimTemplates:
     - metadata:
         name: workspace
@@ -33,10 +41,14 @@ spec:
             template: git-clone
             arguments:
               parameters:
-                - name: repo
-                  value: "{{workflow.parameters.git-repo}}"
-                - name: revision
-                  value: "{{workflow.parameters.git-revision}}"
+                - name: k8s-apps-repo
+                  value: "{{workflow.parameters.k8s-apps-repo}}"
+                - name: k8s-apps-revision
+                  value: "{{workflow.parameters.k8s-apps-revision}}"
+                - name: misc-repo
+                  value: "{{workflow.parameters.misc-repo}}"
+                - name: misc-revision
+                  value: "{{workflow.parameters.misc-revision}}"
 
           # - name: build-and-push
           #   template: build-image
@@ -52,45 +64,65 @@ spec:
               artifacts:
                 - name: k8s-apps
                   git:
-                    repo: "{{workflow.parameters.git-repo}}"
-                    revision: "{{workflow.parameters.git-revision}}"
+                    repo: "{{workflow.parameters.k8s-apps-repo}}"
+                    revision: "{{workflow.parameters.k8s-apps-revision}}"
                     disableSubmodules: true
             dependencies: [checkout]
 
-          - name: run-manifests-linter
-            template: run-manifests-linter
+          - name: run-k8s-linter
+            template: run-k8s-linter
             arguments:
               artifacts:
                 - name: k8s-apps
                   git:
-                    repo: "{{workflow.parameters.git-repo}}"
-                    revision: "{{workflow.parameters.git-revision}}"
+                    repo: "{{workflow.parameters.k8s-apps-repo}}"
+                    revision: "{{workflow.parameters.k8s-apps-revision}}"
                     disableSubmodules: true
             dependencies: [checkout]
 
-          - name: update-manifests
-            template: update-git-manifests
-            dependencies: [run-ae-linter, run-manifests-linter]
+          - name: run-misc-linter
+            template: run-misc-linter
+            arguments:
+              artifacts:
+                - name: misc
+                  git:
+                    repo: "{{workflow.parameters.misc-repo}}"
+                    revision: "{{workflow.parameters.misc-revision}}"
+                    disableSubmodules: true
+            dependencies: [checkout]
+
+          - name: update-git
+            template: update-git
+            dependencies: [run-ae-linter, run-k8s-linter, run-misc-linter]
             arguments:
               parameters:
-                - name: image
-                  value: "{{workflow.parameters.image-name}}"
-                - name: tag
-                  value: "{{workflow.parameters.git-revision}}"
+                - name: k8s-apps-image
+                  value: "{{workflow.parameters.k8s-apps-image-name}}"
+                - name: k8s-apps-tag
+                  value: "{{workflow.parameters.k8s-apps-revision}}"
+                - name: misc-image
+                  value: "{{workflow.parameters.misc-image-name}}"
+                - name: misc-tag
+                  value: "{{workflow.parameters.misc-revision}}"
 
     - name: git-clone
       inputs:
         parameters:
-          - name: repo
-          - name: revision
+          - name: k8s-apps-repo
+          - name: k8s-apps-revision
+          - name: misc-repo
+          - name: mis-revision
       container:
         image: alpine/git:latest
         command: [sh, -c]
         args:
           - |
-            git clone {{inputs.parameters.repo}} /workspace/k8s-apps
+            git clone {{inputs.parameters.k8s-apps-repo}} /workspace/k8s-apps
             cd /workspace/k8s-apps
-            git checkout {{inputs.parameters.revision}}
+            git checkout {{inputs.parameters.k8s-apps-revision}}
+            git clone {{inputs.parameters.misc-repo}} /workspace/misc
+            cd /workspace/misc
+            git checkout {{inputs.parameters.misc-revision}}
         volumeMounts:
           - name: workspace
             mountPath: /workspace
@@ -143,7 +175,7 @@ spec:
           - -R
           - /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
-    - name: run-manifests-linter
+    - name: run-k8s-linter
       inputs:
         artifacts:
           - name: k8s-apps
@@ -157,10 +189,27 @@ spec:
             pipx install yamlfix
             pipx ensurepath
             source ~/.bashrc
-            yamllint -c /workspace/k8s-apps/{{workflow.parameters.manifests-path}}/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+            yamllint -c /workspace/k8s-apps/{{workflow.parameters.misc-path}}/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
             yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
-    - name: update-git-manifests
+    - name: run-misc-linter
+      inputs:
+        artifacts:
+          - name: misc
+            path: /workspace/misc
+      container:
+        image: alpine:latest
+        command: [sh, -c]
+        args:
+          - |
+            apk add --no-cache bash git py3-pip pipx yamllint
+            pipx install yamlfix
+            pipx ensurepath
+            source ~/.bashrc
+            yamllint -c /workspace/{{workflow.parameters.misc-path}}/.yamllint.yml /workspace/{{workflow.parameters.misc-path}}
+            yamlfix /workspace/{{workflow.parameters.misc-path}}
+
+    - name: update-git
       inputs:
         parameters:
           - name: image
@@ -170,14 +219,23 @@ spec:
         command: [sh, -c]
         args:
           - |
-            # Clone the repository
+            # Clone k8s-apps repository
             git clone https://$(GIT_USER):$(GIT_TOKEN)@github.com/phamcs/k8s-apps.git /tmp/k8s-apps
             cd /tmp/k8s-apps
             # Commit and push
             git config user.email "phamcs@gmail.com"
             git config user.name "CI Pipeline"
-            git add .
-            git commit -m "Linting yaml manifests"
+            git add --all
+            git commit -am "Linting yaml manifests"
+            git push origin HEAD:main
+            # Clone misc repository
+            git clone https://$(GIT_USER):$(GIT_TOKEN)@github.com/phamcs/misc.git /tmp/misc
+            cd /tmp/misc
+            # Commit and push
+            git config user.email "phamcs@gmail.com"
+            git config user.name "CI Pipeline"
+            git add --all
+            git commit -am "Linting yaml manifests"
             git push origin HEAD:main
         env:
           - name: GIT_USER
