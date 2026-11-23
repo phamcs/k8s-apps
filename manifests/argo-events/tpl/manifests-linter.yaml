@@ -46,8 +46,19 @@ spec:
           #       - name: image
           #         value: "{{workflow.parameters.image-name}}"
 
-          - name: run-linter
-            template: run-linter
+          - name: run-ae-linter
+            template: run-ae-linter
+            arguments:
+              artifacts:
+                - name: k8s-apps
+                  git:
+                    repo: "{{workflow.parameters.git-repo}}"
+                    revision: "{{workflow.parameters.git-revision}}"
+                    disableSubmodules: true
+            dependencies: [checkout]
+
+          - name: run-manifests-linter
+            template: run-manifests-linter
             arguments:
               artifacts:
                 - name: k8s-apps
@@ -59,7 +70,7 @@ spec:
 
           - name: update-manifests
             template: update-git-manifests
-            dependencies: [run-linter]
+            dependencies: [run-ae-linter, run-manifests-linter]
             arguments:
               parameters:
                 - name: image
@@ -118,7 +129,21 @@ spec:
       #         - key: .dockerconfigjson
       #           path: config.json
 
-    - name: run-linter
+    - name: run-ae-linter
+      inputs:
+        artifacts:
+          - name: k8s-apps
+            path: /workspace/k8s-apps
+      container:
+        image: quay.io/argoproj/argo-events:latest
+        command: [argo-events]
+        args:
+          - lint
+          - --strict
+          - -R
+          - /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+
+    - name: run-manifests-linter
       inputs:
         artifacts:
           - name: k8s-apps
