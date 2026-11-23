@@ -128,9 +128,10 @@ spec:
         command: [sh, -c]
         args:
           - |
-            apk add --no-cache yamllint git py3-pip pipx
+            apk add --no-cache bash git py3-pip pipx yamllint
             pipx install yamlfix
             pipx ensurepath
+            source ~/.bashrc
             yamllint -c /workspace/k8s-apps/{{workflow.parameters.manifests-path}}/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
             yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
