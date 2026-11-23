@@ -128,7 +128,7 @@ spec:
         command: [sh, -c]
         args:
           - |
-            apk add --no-cache git py3-pip pipx yamllint
+            apk add --no-cache bash git py3-pip pipx yamllint
             pipx install yamlfix
             #export PATH=/root/.local/bin:$PATH
             pipx ensurepath
