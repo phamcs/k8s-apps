@@ -215,8 +215,8 @@ spec:
         parameters:
           - name: k8s-apps-image
           - name: k8s-apps-tag
-          - name: misc-image-name
-          - name: misc-image-tag
+          - name: misc-image
+          - name: misc-tag
       container:
         image: alpine/git:latest
         command: [sh, -c]
