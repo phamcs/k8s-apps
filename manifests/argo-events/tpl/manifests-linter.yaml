@@ -124,28 +124,16 @@ spec:
           - name: k8s-apps
             path: /workspace/k8s-apps
       container:
-        image: alpine:latest
-        command: [sh, -c]
+        image: debian:12-slim
+        command: [bash]
         args:
           - |
-            apk add --no-cache bash git py3-pip pipx yamllint
-            pipx install yamlfix
+            apt update && apt install -y git python3-pip pip
+            pip install yamlfix yamllint
             #export PATH=/root/.local/bin:$PATH
-            pipx ensurepath
+            #pipx ensurepath
             yamllint -c /workspace/k8s-apps/{{workflow.parameters.manifests-path}}/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
             yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
-
-        env:
-          - name: GIT_USER
-            valueFrom:
-              secretKeyRef:
-                name: github-webhook-secret
-                key: username
-          - name: GIT_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: github-webhook-secret
-                key: token
 
     - name: update-git-manifests
       inputs:
