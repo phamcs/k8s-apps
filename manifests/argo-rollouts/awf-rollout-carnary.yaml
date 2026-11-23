@@ -86,11 +86,11 @@ spec:
     #     - setWeight: 100
 
     blueGreen:
-      activeService: alpine-stable
-      previewService: alpine-carnary
+      activeService: manifests-stable
+      previewService: manifests-carnary
       prePromotionAnalysis:
         templates:
-          - templateName: run-argo-workflow
+          - templateName: manifests-ci-pipeline
         args:
           - name: workflow-template-name
             value: smoke-test-bluegreen-suite
