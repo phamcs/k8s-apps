@@ -15,7 +15,7 @@ spec:
       - name: k8s-apps-image-name
         value: k8s-apps
       - name: manifests-path
-        value: manifests/
+        value: manifests
       - name: misc-repo
         value: https://github.com/phamcs/misc.git
       - name: misc-revision
@@ -23,7 +23,7 @@ spec:
       - name: misc-image-name
         value: misc
       - name: misc-path
-        value: misc/
+        value: misc
 
   volumeClaimTemplates:
     - metadata:
