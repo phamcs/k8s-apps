@@ -11,7 +11,7 @@ RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/
 
 WORKDIR /home/app
 
-COPY * .
+COPY manifests/ manifests/
 
 RUN chown -R app:app ./
 
