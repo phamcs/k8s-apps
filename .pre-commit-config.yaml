@@ -1,44 +1,68 @@
+# Canonical pre-commit configuration for llm-d repos
+# Copy this file to the root of your repo
+#
+# Install: pip install pre-commit && pre-commit install
+# Run all: pre-commit run --all-files
+
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  # General file hygiene hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: debug-statements
-    -   id: double-quote-string-fixer
-    -   id: name-tests-test
-    -   id: requirements-txt-fixer
--   repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v3.3.0
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--unsafe]  # allows custom YAML tags used in k8s
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+      - id: check-case-conflict
+
+  # Shell script linting (requires shellcheck installed)
+  - repo: local
     hooks:
-    -   id: setup-cfg-fmt
--   repo: https://github.com/asottile/reorder-python-imports
-    rev: v3.19.0
+      - id: shellcheck
+        name: shellcheck
+        language: system
+        entry: shellcheck
+        args: [-x, --severity=warning]
+        types: [shell]
+
+  # Dockerfile linting (requires hadolint installed)
+  - repo: local
     hooks:
-    -   id: reorder-python-imports
-        exclude: ^pre_commit/resources/
-        args: [--py311-plus, --add-import, 'from __future__ import annotations']
--   repo: https://github.com/asottile/add-trailing-comma
-    rev: v4.0.0
+      - id: hadolint-docker
+        name: hadolint
+        language: system
+        entry: hadolint
+        args: [--failure-threshold, error]
+        files: Dockerfile(\\..*)?$
+        types: [file]
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.47.0
     hooks:
-    -   id: add-trailing-comma
--   repo: https://github.com/asottile/pyupgrade
-    rev: v3.22.0
+      - id: markdownlint
+        args: [--fix]
+
+  # Python linting and formatting (ruff)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.0
     hooks:
-    -   id: pyupgrade
-        args: [--py311-plus]
--   repo: https://github.com/hhatto/autopep8
-    rev: v2.3.2
+      - id: ruff
+        args: [--output-format, github, --fix]
+      - id: ruff-format
+
+  # YAML linting
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.37.1
     hooks:
-    -   id: autopep8
--   repo: https://github.com/PyCQA/flake8
-    rev: 7.5.0
-    hooks:
-    -   id: flake8
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.4.1
-    hooks:
-    -   id: mypy
-        additional_dependencies: [types-pyyaml]
-        exclude: ^testing/resources/
+      - id: yamllint
+        args:
+          - -d
+          - >-
+            {extends: default, rules: {line-length: {max: 250},
+            document-start: disable, truthy: {check-keys: false}}}
