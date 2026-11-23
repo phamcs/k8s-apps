@@ -23,7 +23,7 @@ spec:
       - name: misc-image-name
         value: misc
       - name: misc-path
-        value: misc
+        value: ["misc/roles", "misc/playbooks"]
 
   volumeClaimTemplates:
     - metadata:
