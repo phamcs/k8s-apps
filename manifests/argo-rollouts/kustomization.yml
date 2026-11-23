@@ -7,10 +7,10 @@ configurations:
   - rollout-transform.yaml
 
 resources:
-  - awf-rollout-carnary.yaml
+  #- awf-rollout-carnary.yaml
   - nginx-rollout-carnary.yaml
   - rollout-dashboard-ingress.yaml
-  - sa-rbac.yaml
+  #- sa-rbac.yaml
 
 
 helmCharts:
