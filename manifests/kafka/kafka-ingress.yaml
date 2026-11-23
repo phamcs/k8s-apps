@@ -13,7 +13,7 @@ metadata:
     traefik.ingress.kubernetes.io/service.serversscheme: https
     traefik.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
     - host: kafka-console-dev.example.com
       http:
