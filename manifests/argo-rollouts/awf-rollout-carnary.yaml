@@ -68,6 +68,7 @@ spec:
       containers:
         - name: alpine
           image: docker.io/alpine:latest
+          command: [sleep, "10"]
           ports:
             - containerPort: 8081
 
