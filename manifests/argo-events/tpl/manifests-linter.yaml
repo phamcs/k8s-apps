@@ -124,14 +124,13 @@ spec:
           - name: k8s-apps
             path: /workspace/k8s-apps
       container:
-        image: debian:12-slim
-        command: [bash]
+        image: alpine:latest
+        command: [sh, -c]
         args:
           - |
-            apt update && apt install -y git python3-pip pip
-            pip install yamlfix yamllint
-            #export PATH=/root/.local/bin:$PATH
-            #pipx ensurepath
+            apk add --no-cache yamllint git py3-pip pipx
+            pipx install yamlfix
+            pipx ensurepath
             yamllint -c /workspace/k8s-apps/{{workflow.parameters.manifests-path}}/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
             yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
