@@ -131,8 +131,13 @@ spec:
             apk add --no-cache git py3-pip pipx yamllint
             pipx install yamlfix
             export PATH=$PATH:/root/.local/bin
-            yamllint -c /workspace/k8s-apps/manifests/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+            yamllint -c /workspace/k8s-apps/{{workflow.parameters.manifests-path}}/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
             yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+            git config user.email "phamcs@gmail.com"
+            git config user.name "CI Pipeline"
+            git add --all
+            git commit -m "Linting yaml manifests"
+            git push origin HEAD:main
         env:
           - name: GIT_USER
             valueFrom:
