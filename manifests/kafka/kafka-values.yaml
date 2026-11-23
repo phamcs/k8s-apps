@@ -17,7 +17,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  defaultStorageClass: ""
+  defaultStorageClass: "managed-nfs"
   ## Security parameters
   ##
   security:
@@ -43,13 +43,13 @@ kubeVersion: ""
 apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride: ""
+nameOverride: "kafka"
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride: ""
+fullnameOverride: "kafka"
 ## @param namespaceOverride String to fully override common.names.namespace
 ##
-namespaceOverride: ""
+namespaceOverride: "kafka"
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
