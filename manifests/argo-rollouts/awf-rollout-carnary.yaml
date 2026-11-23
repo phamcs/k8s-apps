@@ -79,7 +79,7 @@ spec:
         - pause: { duration: 3m }
         - analysis:
             templates:
-              - templateName: manifests-ci-pipeline
+              - templateName: run-argo-workflow
             args:
               - name: workflow-template-name
                 value: smoke-test-carnary-suite
@@ -90,7 +90,7 @@ spec:
     #   previewService: manifests-carnary
     #   prePromotionAnalysis:
     #     templates:
-    #       - templateName: manifests-ci-pipeline
+    #       - templateName: run-argo-workflow
     #     args:
     #       - name: workflow-template-name
     #         value: smoke-test-bluegreen-suite
