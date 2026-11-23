@@ -73,24 +73,24 @@ spec:
             - containerPort: 8081
 
   strategy:
-    # canary:
-    #   steps:
-    #     - setWeight: 20
-    #     - pause: { duration: 3m }
-    #     - analysis:
-    #         templates:
-    #           - templateName: run-argo-workflow
-    #         args:
-    #           - name: workflow-template-name
-    #             value: smoke-test-carnary-suite
-    #     - setWeight: 100
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: { duration: 3m }
+        - analysis:
+            templates:
+              - templateName: manifests-ci-pipeline
+            args:
+              - name: workflow-template-name
+                value: smoke-test-carnary-suite
+        - setWeight: 100
 
-    blueGreen:
-      activeService: manifests-stable
-      previewService: manifests-carnary
-      prePromotionAnalysis:
-        templates:
-          - templateName: manifests-ci-pipeline
-        args:
-          - name: workflow-template-name
-            value: smoke-test-bluegreen-suite
+    # blueGreen:
+    #   activeService: manifests-stable
+    #   previewService: manifests-carnary
+    #   prePromotionAnalysis:
+    #     templates:
+    #       - templateName: manifests-ci-pipeline
+    #     args:
+    #       - name: workflow-template-name
+    #         value: smoke-test-bluegreen-suite
