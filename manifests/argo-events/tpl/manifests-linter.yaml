@@ -24,8 +24,7 @@ spec:
         value: misc
       - name: misc-path
         value: misc/
-      - name: update-git
-        value: update-git
+
   volumeClaimTemplates:
     - metadata:
         name: workspace
@@ -214,8 +213,10 @@ spec:
     - name: update-git
       inputs:
         parameters:
-          - name: image
-          - name: tag
+          - name: k8s-apps-image
+          - name: k8s-apps-tag
+          - name: misc-image-name
+          - name: misc-image-tag
       container:
         image: alpine/git:latest
         command: [sh, -c]
