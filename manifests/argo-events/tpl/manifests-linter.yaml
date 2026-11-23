@@ -131,7 +131,7 @@ spec:
             apk add --no-cache git py3-pip pipx yamllint
             pipx install yamlfix
             export PATH=$PATH:/root/.local/bin
-            yamllint /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
+            yamllint -c manifests/.yamllint.yml /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
             yamlfix /workspace/k8s-apps/{{workflow.parameters.manifests-path}}
 
     - name: update-git-manifests
