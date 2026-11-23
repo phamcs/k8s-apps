@@ -24,6 +24,8 @@ spec:
         value: misc
       - name: misc-path
         value: misc/
+      - name: update-git
+        value: update-git
   volumeClaimTemplates:
     - metadata:
         name: workspace
