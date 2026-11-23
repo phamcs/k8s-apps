@@ -23,8 +23,11 @@ spec:
       - name: misc-image-name
         value: misc
       - name: misc-path
-        value: ["misc/roles", "misc/playbooks"]
-
+        value: misc
+      - name: misc-roles-path
+        value: "misc/roles"
+      - name: misc-playbooks-path
+        value: "misc/playbooks"
   volumeClaimTemplates:
     - metadata:
         name: workspace
@@ -207,8 +210,10 @@ spec:
             pipx install yamlfix
             pipx ensurepath
             source ~/.bashrc
-            yamllint -c /workspace/{{workflow.parameters.misc-path}}/.yamllint.yml /workspace/{{workflow.parameters.misc-path}}
-            yamlfix /workspace/{{workflow.parameters.misc-path}}
+            yamllint -c /workspace/{{workflow.parameters.misc-path}}/.yamllint.yml /workspace/{{workflow.parameters.misc-playbooks-path}}
+            yamllint -c /workspace/{{workflow.parameters.misc-path}}/.yamllint.yml /workspace/{{workflow.parameters.misc-roles-path}}
+            yamlfix /workspace/{{workflow.parameters.misc-playbooks-path}}
+            yamlfix /workspace/{{workflow.parameters.misc-roles-path}}
 
     - name: update-git
       inputs:
