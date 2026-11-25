@@ -16,6 +16,7 @@ spec:
         value: k8s-apps
       - name: manifests-path
         value: manifests
+        
   volumeClaimTemplates:
     - metadata:
         name: workspace
