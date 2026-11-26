@@ -1,0 +1,30 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: headlamp-oidc-sync
+  namespace: headlamp
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: headlamp-oidc
+    kind: ClusterSecretStore
+  target:
+    name: headlamp-oidc
+    creationPolicy: Owner
+  data:
+    - secretKey: OIDC_CLIENT_ID
+      remoteRef:
+        key: headlamp
+        property: client_id
+    - secretKey: OIDC_CLIENT_SECRET
+      remoteRef:
+        key: headlamp
+        property: client_secret
+    - secretKey: OIDC_ISSUER_URL
+      remoteRef:
+        key: headlamp
+        property: issuer_url
+    - secretKey: OIDC_SCOPES
+      remoteRef:
+        key: headlamp
+        property: scopes
