@@ -76,13 +76,13 @@ config:
     #     scopes: "scopes"
 
     # -- OIDC client ID
-    clientID: ""
+    clientID: "clientID"
     # -- OIDC client secret
-    clientSecret: ""
+    clientSecret: "clientSecret"
     # -- OIDC issuer URL
-    issuerURL: ""
+    issuerURL: "issuerURL"
     # -- OIDC scopes to be used
-    scopes: ""
+    scopes: "scopes"
     # -- OIDC callback URL
     callbackURL: ""
 
