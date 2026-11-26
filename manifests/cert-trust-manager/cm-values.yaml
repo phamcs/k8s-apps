@@ -274,7 +274,7 @@ serviceAccount:
 # automountServiceAccountToken: true
 
 # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted.
-enableCertificateOwnerRef: false
+enableCertificateOwnerRef: true
 
 # This property is used to configure options for the controller pod.
 # This allows setting options that would usually be provided using flags.
@@ -703,7 +703,7 @@ prometheus:
   # Note that you cannot enable both PodMonitor and ServiceMonitor as they are mutually exclusive. Enabling both will result in an error.
   podmonitor:
     # Create a PodMonitor to add cert-manager to Prometheus.
-    enabled: false
+    enabled: true
 
     # The namespace that the pod monitor should live in, defaults
     # to the cert-manager namespace.
