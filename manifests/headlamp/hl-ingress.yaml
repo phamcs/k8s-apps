@@ -11,6 +11,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/service.serversscheme: https
     traefik.ingress.kubernetes.io/ssl-passthrough: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: default-forward-https@kubernetescrd
 spec:
   ingressClassName: traefik
   tls:
