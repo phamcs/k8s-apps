@@ -12,19 +12,19 @@ spec:
     name: headlamp-oidc
     creationPolicy: Owner
   data:
-    - secretKey: OIDC_CLIENT_ID
+    - secretKey: client_id
       remoteRef:
         key: headlamp
         property: client_id
-    - secretKey: OIDC_CLIENT_SECRET
+    - secretKey: client_secret
       remoteRef:
         key: headlamp
         property: client_secret
-    - secretKey: OIDC_ISSUER_URL
+    - secretKey: issuer_url
       remoteRef:
         key: headlamp
         property: issuer_url
-    - secretKey: OIDC_SCOPES
+    - secretKey: scopes
       remoteRef:
         key: headlamp
         property: scopes
