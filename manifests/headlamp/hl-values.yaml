@@ -76,13 +76,13 @@ config:
     #     scopes: "scopes"
 
     # -- OIDC client ID
-    clientID: "${OIDC_CLIENT_ID}"
+    clientID: ""
     # -- OIDC client secret
-    clientSecret: "${OIDC_CLIENT_SECRET}"
+    clientSecret: ""
     # -- OIDC issuer URL
-    issuerURL: "${OIDC_ISSUER_URL}"
+    issuerURL: ""
     # -- OIDC scopes to be used
-    scopes: "${OIDC_SCOPES}"
+    scopes: ""
     # -- OIDC callback URL
     callbackURL: ""
 
@@ -204,7 +204,7 @@ clusterRoleBinding:
   create: true
   # -- Set name of the Cluster Role with limited permissions from you cluster
   # for example - clusterRoleName: user-ro
-  clusterRoleName: cluster-admin
+  clusterRoleName: hl-cluster-admin
   # -- Annotations to add to the cluster role binding
   annotations: {}
 
@@ -290,17 +290,17 @@ service:
   #   nodePort: null
 
 # -- Headlamp containers volume mounts
-#volumeMounts: []
-volumeMounts:
-  - name: kubeconfig
-    mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
-    readOnly: true
+volumeMounts: []
+# volumeMounts:
+#   - name: kubeconfig
+#     mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
+#     readOnly: true
 # -- Headlamp pod's volumes
-#volumes: []
-volumes:
-  - name: kubeconfig
-    secret:
-      secretName: headlamp-kubeconfig
+volumes: []
+# volumes:
+#   - name: kubeconfig
+#     secret:
+#       secretName: headlamp-kubeconfig
 
 persistentVolumeClaim:
   # -- Enable Persistent Volume Claim
