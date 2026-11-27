@@ -290,17 +290,17 @@ service:
   #   nodePort: null
 
 # -- Headlamp containers volume mounts
-volumeMounts: []
-# volumeMounts:
-#   - name: kubeconfig
-#     mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
-#     readOnly: true
+#volumeMounts: []
+volumeMounts:
+  - name: kubeconfig
+    mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
+    readOnly: true
 # -- Headlamp pod's volumes
-volumes: []
-# volumes:
-#   - name: kubeconfig
-#     secret:
-#       secretName: headlamp-kubeconfig
+#volumes: []
+volumes:
+  - name: kubeconfig
+    secret:
+      secretName: headlamp-kubeconfig
 
 persistentVolumeClaim:
   # -- Enable Persistent Volume Claim
