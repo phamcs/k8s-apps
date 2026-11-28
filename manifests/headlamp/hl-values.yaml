@@ -60,7 +60,7 @@ config:
     #       name: oidc
     secret:
       # -- Generate OIDC secret. If true, will generate a secret using .config.oidc.
-      create: false
+      create: true
       # -- Name of the OIDC secret.
       name: oidc
 
@@ -113,11 +113,11 @@ config:
     #       name: oidc
     externalSecret:
       enabled: false
-      name: "headlamp-oidc"
+      name: ""
       # -- Set to true if your external secret contains an OIDC_SCOPES key.
       # When false (default), the -oidc-scopes argument is omitted so that
       # a missing key does not produce an empty or unresolved argument.
-      hasScopes: true
+      hasScopes: false
 
     # -- URL to fetch additional user info for the /me endpoint.
     # For oauth2proxy /oauth2/userinfo can be used. Empty and it will not be used.
@@ -263,7 +263,7 @@ service:
   # -- Annotations to add to the service
   annotations: {}
   # -- Kubernetes Service type
-  type: LoadBalancer
+  type: ClusterIP
   # -- Kubernetes Service port
   port: 80
   # -- Kubernetes Service port appProtocol (for the main http port)
@@ -271,7 +271,7 @@ service:
   # -- Kubernetes Service clusterIP
   clusterIP: ""
   # -- Kubernetes Service loadBalancerIP
-  loadBalancerIP: "10.0.0.92"
+  loadBalancerIP: ""
   # -- Kubernetes Service loadBalancerSourceRanges
   loadBalancerSourceRanges: []
   # -- Kubernetes Service Nodeport
@@ -291,16 +291,9 @@ service:
 
 # -- Headlamp containers volume mounts
 volumeMounts: []
-# volumeMounts:
-#   - name: kubeconfig
-#     mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
-#     readOnly: true
-#-- Headlamp pod's volumes
+
+# -- Headlamp pod's volumes
 volumes: []
-# volumes:
-#   - name: kubeconfig
-#     secret:
-#       secretName: headlamp-kubeconfig
 
 persistentVolumeClaim:
   # -- Enable Persistent Volume Claim
@@ -542,3 +535,4 @@ extraManifests: []
 #     name: my-config-too
 #   data:
 #     key: value
+
