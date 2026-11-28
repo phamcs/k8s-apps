@@ -32,7 +32,7 @@ initContainers: []
 extraContainers: []
 
 config:
-  inCluster: false
+  inCluster: true
   inClusterContextName: "main"
   # -- base url path at which headlamp should run
   baseURL: ""
@@ -112,7 +112,7 @@ config:
     #       enabled: true
     #       name: oidc
     externalSecret:
-      enabled: true
+      enabled: false
       name: "headlamp-oidc"
       # -- Set to true if your external secret contains an OIDC_SCOPES key.
       # When false (default), the -oidc-scopes argument is omitted so that
@@ -291,18 +291,17 @@ service:
   #   nodePort: null
 
 # -- Headlamp containers volume mounts
-#volumeMounts: []
-volumeMounts:
-  - name: kubeconfig
-    mountPath: /etc/headlamp/kubeconfig
-    subPath: kubeconfig
-    readOnly: true
+volumeMounts: []
+# volumeMounts:
+#   - name: kubeconfig
+#     mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
+#     readOnly: true
 #-- Headlamp pod's volumes
-#volumes: []
-volumes:
-  - name: kubeconfig
-    secret:
-      secretName: headlamp-kubeconfig
+volumes: []
+# volumes:
+#   - name: kubeconfig
+#     secret:
+#       secretName: headlamp-kubeconfig
 
 persistentVolumeClaim:
   # -- Enable Persistent Volume Claim

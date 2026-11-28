@@ -5,7 +5,9 @@ namespace: headlamp
 
 resources:
   - hl-ingress.yaml
-  - hl-oidc-es.yaml
+  - hl-token-cron.yaml
+  - hl-token-gen.yaml
+  - hl-token-push.yaml
 
 helmCharts:
   - name: headlamp

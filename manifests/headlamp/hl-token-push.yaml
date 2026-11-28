@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: push-headlamp-admin-token
+  namespace: headlamp
+spec:
+  refreshInterval: 10m
+  updatePolicy: Replace
+  deletionPolicy: Delete
+  secretStoreRefs:
+    - name: vault-external
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: headlamp-admin-rotated-token
+  data:
+    - match:
+        secretKey: token
+        remoteRef:
+          remoteKey: headlamp/admin-token # Path inside your Vault KV mount
+          property: token
