@@ -76,13 +76,13 @@ config:
     #     scopes: "scopes"
 
     # -- OIDC client ID
-    clientID: "CNY2TgFFK1qz08gaOcCTCV3yBdpTAigtVjFqylkr"
+    clientID: ""
     # -- OIDC client secret
-    clientSecret: "4BzqpfTj7MkcfuEJjBpJosDHtJxkzicjzfDX1QIa7TaXifWEk3amq7BxZtGBNYg0CUAQeER514vaXBE367adXeeWhKWawktl49wYSb3FmROeDF9n2i2VV31C3OcEBP1D"
+    clientSecret: ""
     # -- OIDC issuer URL
-    issuerURL: "https://authentik.superasian.net/application/o/headlamp/"
+    issuerURL: ""
     # -- OIDC scopes to be used
-    scopes: "openid,profile,email,groups,offline_access"
+    scopes: ""
     # -- OIDC callback URL
     callbackURL: ""
 
