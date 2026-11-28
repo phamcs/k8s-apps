@@ -32,7 +32,7 @@ initContainers: []
 extraContainers: []
 
 config:
-  inCluster: true
+  inCluster: false
   inClusterContextName: "main"
   # -- base url path at which headlamp should run
   baseURL: ""
@@ -179,8 +179,9 @@ config:
     # -- Override the experimental/alpha Cluster Inventory no-CRD cache TTL. Empty uses the Headlamp default.
     noCRDCacheTTL: ""
   # Extra arguments that can be given to the container. See charts/headlamp/README.md for more information.
-  extraArgs: []
-
+  #extraArgs: []
+  extraArgs:
+    - "-kubeconfig=/etc/headlamp/kubeconfig"
 # -- An optional list of environment variables
 # env:
 #   - name: KUBERNETES_SERVICE_HOST
@@ -290,17 +291,18 @@ service:
   #   nodePort: null
 
 # -- Headlamp containers volume mounts
-volumeMounts: []
-# volumeMounts:
-#   - name: kubeconfig
-#     mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
-#     readOnly: true
-# -- Headlamp pod's volumes
-volumes: []
-# volumes:
-#   - name: kubeconfig
-#     secret:
-#       secretName: headlamp-kubeconfig
+#volumeMounts: []
+volumeMounts:
+  - name: kubeconfig
+    mountPath: /etc/headlamp/kubeconfig
+    subPath: kubeconfig
+    readOnly: true
+#-- Headlamp pod's volumes
+#volumes: []
+volumes:
+  - name: kubeconfig
+    secret:
+      secretName: headlamp-kubeconfig
 
 persistentVolumeClaim:
   # -- Enable Persistent Volume Claim
@@ -527,7 +529,7 @@ podDisruptionBudget:
   unhealthyPodEvictionPolicy: null
 
 # -- Additional Kubernetes manifests to be deployed. Include the manifest as nested YAML.
-extraManifests: []
+#extraManifests: []
 # - |
 #   apiVersion: v1
 #   kind: ConfigMap
@@ -542,4 +544,28 @@ extraManifests: []
 #     name: my-config-too
 #   data:
 #     key: value
-
+extraManifests:
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: headlamp-kubeconfig
+    data:
+      kubeconfig: |
+        apiVersion: v1
+        kind: Config
+        clusters:
+        - cluster:
+            certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            server: https://kubernetes.default.svc
+          name: in-cluster
+        contexts:
+        - context:
+            cluster: in-cluster
+            user: headlamp-admin
+          name: in-cluster
+        current-context: in-cluster
+        users:
+        - name: headlamp-admin
+          user:
+            tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
