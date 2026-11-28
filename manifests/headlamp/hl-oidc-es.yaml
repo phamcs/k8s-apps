@@ -13,5 +13,5 @@ spec:
     creationPolicy: Owner
   dataFrom:
     - extract:
-        key: headlamp # Adjust path based on your KV mount point
+        key: authentik/oidc/headlamp # Adjust path based on your KV mount point
 
