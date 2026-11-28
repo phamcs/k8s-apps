@@ -263,7 +263,7 @@ service:
   # -- Annotations to add to the service
   annotations: {}
   # -- Kubernetes Service type
-  type: ClusterIP
+  type: LoadBalancer
   # -- Kubernetes Service port
   port: 80
   # -- Kubernetes Service port appProtocol (for the main http port)
@@ -271,7 +271,7 @@ service:
   # -- Kubernetes Service clusterIP
   clusterIP: ""
   # -- Kubernetes Service loadBalancerIP
-  loadBalancerIP: ""
+  loadBalancerIP: "10.0.0.92"
   # -- Kubernetes Service loadBalancerSourceRanges
   loadBalancerSourceRanges: []
   # -- Kubernetes Service Nodeport
