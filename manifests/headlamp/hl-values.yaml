@@ -527,7 +527,7 @@ podDisruptionBudget:
   unhealthyPodEvictionPolicy: null
 
 # -- Additional Kubernetes manifests to be deployed. Include the manifest as nested YAML.
-#extraManifests: []
+extraManifests: []
 # - |
 #   apiVersion: v1
 #   kind: ConfigMap
@@ -542,28 +542,3 @@ podDisruptionBudget:
 #     name: my-config-too
 #   data:
 #     key: value
-extraManifests:
-  - |
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: headlamp-kubeconfig
-    data:
-      kubeconfig: |
-        apiVersion: v1
-        kind: Config
-        clusters:
-        - cluster:
-            certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-            server: https://kubernetes.default.svc
-          name: in-cluster
-        contexts:
-        - context:
-            cluster: in-cluster
-            user: headlamp-admin
-          name: in-cluster
-        current-context: in-cluster
-        users:
-        - name: headlamp-admin
-          user:
-            tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
