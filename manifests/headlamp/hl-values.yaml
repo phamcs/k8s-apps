@@ -179,9 +179,8 @@ config:
     # -- Override the experimental/alpha Cluster Inventory no-CRD cache TTL. Empty uses the Headlamp default.
     noCRDCacheTTL: ""
   # Extra arguments that can be given to the container. See charts/headlamp/README.md for more information.
-  #extraArgs: []
-  extraArgs:
-    - "-kubeconfig=/etc/headlamp/kubeconfig"
+  extraArgs: []
+
 # -- An optional list of environment variables
 # env:
 #   - name: KUBERNETES_SERVICE_HOST
